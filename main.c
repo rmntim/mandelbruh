@@ -94,7 +94,7 @@ int main() {
                   WHITE); // Draw fullscreen quad
     EndShaderMode();
 
-    DrawText("Mandelbrot Set", 10, 10, 20, DARKGRAY);
+    DrawText(FRACTAL_TYPE " Set", 10, 10, 20, DARKGRAY);
     DrawText("Drag to pan and use mouse wheel to zoom", 10, 40, 20, DARKGRAY);
 
     DrawFPS(0, 0);
