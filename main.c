@@ -9,7 +9,7 @@
 #endif
 
 #ifndef FRACTAL_TYPE
-#define FRACTAL_TYPE "mandelbrot"
+#define FRACTAL_TYPE "julia"
 #endif
 
 #define SHADER_DIR "shaders"
@@ -44,15 +44,21 @@ int main() {
   Vector2 lastMousePosition = {0.0f, 0.0f};
   bool isDragging = false;
 
+  float elapsedTime = 0.0f;
+  Vector2 juliaConstant = {0.0f, 1.0f};
+  bool paused = false;
+
   while (!WindowShouldClose()) {
     // Handle mouse wheel zooming
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
       lastMousePosition = GetMousePosition();
       isDragging = true;
     }
+
     if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
       isDragging = false;
     }
+
     if (isDragging) {
       Vector2 currentMousePosition = GetMousePosition();
       Vector2 delta = {currentMousePosition.x - lastMousePosition.x,
@@ -70,9 +76,14 @@ int main() {
       zoomSize *= (wheelMove > 0) ? 0.9f : 1.1f; // Zoom in or out
     }
 
-    double elapsedTime = GetTime() / 2;
+    if (IsKeyPressed(KEY_SPACE)) {
+      paused = !paused;
+    }
 
-    Vector2 juliaConstant = {cosf(elapsedTime), sinf(elapsedTime)};
+    if (!paused) {
+      elapsedTime += GetFrameTime() / 2;
+      juliaConstant = (Vector2){cosf(elapsedTime), sinf(elapsedTime)};
+    }
 
     // Update shader uniforms
     SetShaderValue(shader, GetShaderLocation(shader, "uResolution"),
